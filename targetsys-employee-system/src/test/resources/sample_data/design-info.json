@@ -1,0 +1,15 @@
+{
+  "sampleData": {
+    "75630b29-5959-45e7-b2d8-609412feb941": {
+      "vars-input1": "sample_data/json_3.json",
+      "vars-input2": "sample_data/json_4.json"
+    },
+    "40392af4-640f-49b7-948e-c012785085d2": {
+      "vars-input1": "sample_data/json.json",
+      "vars-input2": "sample_data/json_1.json"
+    },
+    "b0b15bef-6e41-45ba-9e07-6a279ceb76f0": {
+      "payload": "sample_data/json_2.json"
+    }
+  }
+}

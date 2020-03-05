@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<flow name="employeeSys-Impl" doc:id="7e53d970-e624-40f4-91bf-289e73dc271f" >
+		<set-payload value='#[%dw 2.0
+output text/plain
+---
+"Jan Doe employee profile is created in HRMS System"]' doc:name="Set Response Payload" doc:id="719a3bb5-7c65-4ef0-b32d-fe5b2d57840c" />
+		<logger level="INFO" doc:name="Log Response" doc:id="19515c1e-cd27-453f-81af-cb6b563f2125" message="Employee System flow completed. Response :: #[payload]"/>
+	</flow>
+	<flow name="dataweaveFlow" doc:id="51cfbbc8-9d31-4414-914e-d6e77ccc3bc9" >
+		<http:listener doc:name="Listener dataweave" doc:id="0c3d71e3-d24c-4a44-bb20-63b84af6e62e" config-ref="employee-system-httpListenerConfig" path="/dataweave"/>
+		<logger level="INFO" doc:name="Log Request" doc:id="6cf51e88-aa14-4e71-a42e-0e2acaadb873" message="DataWeave flow started. " />
+		<ee:transform doc:name="ProcessDataWeave" doc:id="db4a22c5-540a-479d-a9f0-34dc0ac44c1c">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output text/plain
+---
+Mule::lookup('employeeSys-Impl', {
+	"employee": {
+		"id": "A007",
+		"first_name": "Jan",
+		"last_name": "Doe"
+	}
+})]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="camelCase" ><![CDATA[%dw 2.0
+import java!com::employee::Utility
+output application/json
+---
+{
+	a: Utility::toCamelCase("Test inputString")
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<logger level="INFO" doc:name="Log Response" doc:id="7c574714-5606-4800-bcbc-e3d7ccf4b308" message="DataWeave flow completed. Response :: #[payload] :: CamelCaseResp: #[vars.camelCase]" />
+	</flow>
+	<flow name="camelCaseFlow" doc:id="bb35772f-fe31-4da3-b469-e62f4193855a" >
+		<http:listener doc:name="Listener camelCase" doc:id="9bc93b59-c475-4274-888f-d619bcb63221" config-ref="employee-system-httpListenerConfig" path="/camelcase" outputMimeType="application/json"/>
+		<logger level="INFO" doc:name="Log Request" doc:id="cb599f88-def7-4f2b-bf80-ba7c8a8ce688" message="CamelCase flow started. Request Payload :: #[payload]" />
+		<ee:transform doc:name="ProcessDataWeave" doc:id="7038018b-0160-4ae8-af5e-3500ee25850f">
+			<ee:message>
+				<ee:set-payload ><![CDATA[%dw 2.0
+import java!com::employee::Utility
+output application/json
+---
+{
+	message : Utility::toCamelCase(payload.message)
+}]]></ee:set-payload>
+
+			</ee:message>
+			<ee:variables >
+			</ee:variables>
+		</ee:transform>
+		<logger level="INFO" doc:name="Log Response" doc:id="87901da1-2461-4776-9f2a-e450a3b6ec82" message="CamelCase flow completed. CamelCase Response: #[payload]" />
+	</flow>
+</mule>

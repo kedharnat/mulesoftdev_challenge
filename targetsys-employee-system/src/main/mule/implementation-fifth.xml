@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	
+	<flow name="implementation-fifthFlow" doc:id="5a13b3e0-3ed1-4608-ba13-b0c8c3b9ef03" >
+		<http:listener doc:name="Listener Scoreboard" doc:id="89374d4e-585f-4f62-b4de-c51b4b88dd25" config-ref="employee-system-httpListenerConfig" path="/{in}/numbers"/>
+		<logger level="INFO" doc:name="Log - Numbers flow Started" doc:id="491eab77-b2c5-463c-8fa8-c2319fae2d3d" message="Numbers flow Started" />
+		<set-variable value="#[attributes.uriParams.in as Number]" doc:name="Set inputNumber" doc:id="5a36b269-650e-4d98-86ed-3654b2d34dcf" variableName="inputNumber" />
+		<set-payload value="#[%dw 2.0
+output application/json
+---
+1 to vars.inputNumber]" doc:name="Set Payload" doc:id="1bcbc31c-e62d-4760-bebd-1da2eb159a8c" />
+		<logger level="INFO" doc:name="Log - Numbers flow completed" doc:id="21e9faa6-c63f-4ab6-a861-5cc8133bc2bb" message="Numbers flow completed. Response Payload :: #[payload]"/>
+	
+</flow>
+</mule>

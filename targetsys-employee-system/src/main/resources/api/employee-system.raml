@@ -1,0 +1,17 @@
+#%RAML 1.0
+title: Employee System
+version: 1.0
+baseUri: http://localhost:8081/api/sys/v1.0
+
+/employee:
+  post:    
+    description: This API is for Creating Employee Info in Target Sys
+    body: 
+      application/json:
+        example: !include examples/employee_details.json
+    responses:
+      201:
+        body: 
+          text/plain:
+            example: |
+              "Jan Doe employee profile is created in HRMS System"

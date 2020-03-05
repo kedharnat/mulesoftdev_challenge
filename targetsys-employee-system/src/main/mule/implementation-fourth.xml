@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="implementation-fourthFirstFlow" doc:id="bc085c31-0318-4dbf-9ded-85eafe6e1a8c" >
+		<http:listener doc:name="Listener Scoreboard" doc:id="ee920511-e7d1-4f1f-85af-a118f15881cd" config-ref="employee-system-httpListenerConfig" path="/scoreboard"/>
+		<logger level="INFO" doc:name="Log - Flow Started" doc:id="98bd97fd-c89f-4a00-b0ca-02efce9db3ed" message="ScoreBoard flow Started." />
+		<set-variable value='#[%dw 2.0
+output application/json
+---
+{
+	"employee": [{
+			"id": "A007",
+			"first_name": "Jan",
+			"last_name": "Doe"
+		}, {
+			"id": "A008",
+			"first_name": "Ron",
+			"last_name": "David "
+		},
+		{
+			"id ": "A009 ",
+			"first_name ": "Jane ",
+			"last_name ":"Kane "}, 
+			{
+				"id ": "A010 ",
+				"first_name ": "Marsh",
+				"last_name": "Megan"
+			},
+			{
+				"id": "A011",
+				"first_name": "Kelly",
+				"last_name": "Mitch"
+			},
+			{
+				"id": "A012",
+				"first_name": "Chris",
+				"last_name": "Vaste"
+			}]
+	}]' doc:name="Set Input1" doc:id="33f3ebab-dd3d-40e5-b3d2-8b35ef96ebbd" variableName="input1"/>
+		<set-variable value='#[%dw 2.0
+output application/json
+---
+{
+	"scoreBoard": [{
+			"id": "A007",
+			"subjects": [
+				"Maths",
+				"English",
+				"Arts",
+				"Drawimgs"
+			],
+			"score": [
+				80,
+				75,
+				89,
+				100
+			]
+		},
+		{
+			"id": "A008",
+			"subjects": [
+				"Maths",
+				"English",
+				"Arts",
+				"Drawimgs"
+			],
+			"score": [
+				70,
+				85,
+				69,
+				90
+			]
+		},
+		{
+			"id": "A021 ",
+			"subjects ": [
+				"Maths ",
+				"English ",
+				"Arts ",
+				"Drawimgs "
+			],
+			"score ": [
+				90,
+				87,
+				77,
+				95
+			]
+		}
+	]
+}]' doc:name="Set Input2" doc:id="9b634177-c324-4640-a7b8-00b97d0e73a8" variableName="input2"/>
+		<ee:transform doc:name="Map InputElements by Id" doc:id="40392af4-640f-49b7-948e-c012785085d2" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+var scoreBoardIds = vars.input2.scoreBoard.id reduce ((val, acc) -> val ++ "," ++ acc)
+---
+{
+   "certificate":  (vars.input1.employee filter ((val, index) -> (contains(scoreBoardIds default [], val.id default "")))) map ((input1Line, index1) -> {
+   		((vars.input2.scoreBoard filter $.id == input1Line.id) map ((input2Line, index2) -> {
+   			"id" : input1Line.id,
+   			"firstName": input1Line.first_name,
+         	"LastName": input1Line.last_name,
+         	"MarksBySubjectWise": 
+         	{
+            	"Maths ": input2Line.score[0],
+            	"English ":input2Line.score[1],
+            	"Arts ":input2Line.score[2],
+            	"Drawings ":input2Line.score[3]            
+            }    			
+   		}))
+   }) 
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<set-payload value='#[%dw 2.0
+output application/json
+---
+("certificate" :  payload.certificate filter $ != {}) if(payload.certificate != null)]' doc:name="SkipEmptySets" doc:id="b0b15bef-6e41-45ba-9e07-6a279ceb76f0" />
+		<logger level="INFO" doc:name="Log - Flow Completed" doc:id="3a5ff798-59fa-4e4b-b4d2-1c4a7fe64c6e" message="ScoreBoard flow completed. Response Payload :: #[payload]"/>
+	</flow>
+	<flow name="implementation-fourthSecondFlow" doc:id="887d209a-635e-43bf-a45e-da6ada5ecab5" >
+		<http:listener doc:name="Listener Scoreboard No Match" doc:id="cdaecba0-8fce-4fff-b552-05d126996584" config-ref="employee-system-httpListenerConfig" path="/sb_nomatch"/>
+		<logger level="INFO" doc:name="Log - Flow Started" doc:id="0f3b6161-2d12-4e97-a59c-f8935e6ef716" message="ScoreBoard-NoMatching flow Started." />
+		<set-variable value='#[%dw 2.0
+output application/json
+---
+{
+	"employee": [{
+			"id": "A007",
+			"first_name": "Jan",
+			"last_name": "Doe"
+		}, {
+			"id": "A008",
+			"first_name": "Ron",
+			"last_name": "David "
+		},
+		{
+			"id ": "A009 ",
+			"first_name ": "Jane ",
+			"last_name ":"Kane "}, 
+			{
+				"id ": "A010 ",
+				"first_name ": "Marsh",
+				"last_name": "Megan"
+			},
+			{
+				"id": "A011",
+				"first_name": "Kelly",
+				"last_name": "Mitch"
+			},
+			{
+				"id": "A012",
+				"first_name": "Chris",
+				"last_name": "Vaste"
+			}]
+	}]' doc:name="Set Input1" doc:id="d8b1c9de-91bd-4f89-a6d1-f601f35d0216" variableName="input1"/>
+		<set-variable value='#[%dw 2.0
+output application/json
+---
+{
+	"scoreBoard": [{
+			"id": "A007",
+			"subjects": [
+				"Maths",
+				"English",
+				"Arts",
+				"Drawimgs"
+			],
+			"score": [
+				80,
+				75,
+				89,
+				100
+			]
+		},
+		{
+			"id": "A008",
+			"subjects": [
+				"Maths",
+				"English",
+				"Arts",
+				"Drawimgs"
+			],
+			"score": [
+				70,
+				85,
+				69,
+				90
+			]
+		},
+		{
+			"id": "A021 ",
+			"subjects ": [
+				"Maths ",
+				"English ",
+				"Arts ",
+				"Drawimgs "
+			],
+			"score ": [
+				90,
+				87,
+				77,
+				95
+			]
+		}
+	]
+}]' doc:name="Set Input2" doc:id="466d15b1-4b09-4b69-a8b6-68c385cb6ee9" variableName="input2"/>
+		<ee:transform doc:name="Map InputElements by Id" doc:id="75630b29-5959-45e7-b2d8-609412feb941" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+var ids = vars.input1.employee.id reduce ((val, acc) -> val ++ "," ++ acc)
+---
+vars.input1 ++ { scoreBoard : (vars.input2.scoreBoard filter ((val, index) -> (!contains(ids,val.id)))) }]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Log - Flow Completed" doc:id="8033b7d0-fbaf-4cdc-a2cf-5f020788db05" message="ScoreBoard-NoMatch flow completed. Response Payload :: #[payload]"/>
+	
+</flow>
+</mule>

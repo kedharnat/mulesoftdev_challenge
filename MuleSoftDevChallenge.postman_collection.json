@@ -1,0 +1,175 @@
+{
+	"info": {
+		"_postman_id": "445289b0-7eef-40a9-8f7d-45c12d60c19c",
+		"name": "MuleSoftDevChallenge",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "EmployeeDetails_Task_1.0",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"employee\": {\r\n\t\t\"id\": \"A007\",\r\n\t\t\"first_name\": \"Jan\",\r\n\t\t\"last_name\": \"Doe\"\r\n\t}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/sys/v1.0/employee",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"sys",
+						"v1.0",
+						"employee"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Dataweave_Task2",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/api/sys/v1.0/dataweave",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"sys",
+						"v1.0",
+						"dataweave"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ScoreBoard_Task4.1",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/api/sys/v1.0/scoreboard",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"sys",
+						"v1.0",
+						"scoreboard"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Numbers_Task5",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/api/sys/v1.0/20/numbers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"sys",
+						"v1.0",
+						"20",
+						"numbers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ScoreBoard_NoMatch_Task4.2",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/api/sys/v1.0/sb_nomatch",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"sys",
+						"v1.0",
+						"sb_nomatch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CamelCase_Task3",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"message\" : \"InputString For testing\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/sys/v1.0/camelcase",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"sys",
+						"v1.0",
+						"camelcase"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
